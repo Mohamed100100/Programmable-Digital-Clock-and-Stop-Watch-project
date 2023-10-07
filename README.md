@@ -1,4 +1,4 @@
-# **Project Description: Programmable Digital Clock**
+# ** Project Description: Digital-Clock-and-Stop-Watch **
 
 **Introduction:**
 #Project_Description: Programmable Digital Clock & Stop Watch
