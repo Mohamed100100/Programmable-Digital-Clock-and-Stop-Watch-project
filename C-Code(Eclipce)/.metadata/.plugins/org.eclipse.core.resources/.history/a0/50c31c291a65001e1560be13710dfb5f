@@ -1,0 +1,823 @@
+/*
+ * main.c
+ *
+ *  Created on: ٠٧‏/١٠‏/٢٠٢٣
+ *      Author: Eng.Mohamed Gamal
+ */
+#define F_CPU 8000000UL
+#include "STD_TYPES.h"
+#include "DIO_Int.h"
+#include "LCD_Int.h"
+#include "TIMER0_Init.h"
+
+#define MODE1	1
+#define MODE2	2
+
+u32 counter ;
+u8 Sec_Counter  ;
+u8 Min_Counter  ;
+u8 Hour_Counter ;
+
+u8 Day_Counter =1 ;
+u8 Mon_Counter =1 ;
+
+u8 Mode = MODE1 ;
+u8 Location = 0 ;
+
+void Mode_Chang(void);
+void Sec_Timing(void);
+
+int main()
+{
+	TIMER0_vidInit();
+	LCD_vidInit();
+	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN2,DIO_INPUT);
+	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN3,DIO_INPUT);
+	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN4,DIO_INPUT);
+	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN5,DIO_INPUT);
+	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN6,DIO_INPUT);
+
+	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN2);
+	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN3);
+	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN4);
+	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN5);
+	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN6);
+
+	DIO_vidEnableIntrupt(DIO_INT_NUM0,DIO_INT_F_EDGE);
+
+	LCD_vidSendCommand(LCD_CURSUROFF_BLINKOFF);
+	Timer0_CTC_Call_Back = Sec_Timing;
+	DIO_INT0_Call_Back = Mode_Chang;
+
+
+	LCD_vidWriteStringAtPossition((u8 *)"Time: ",0,0);
+	LCD_vidWriteCharctr('0');
+	LCD_vidWriteCharctr('0');
+	LCD_vidWriteCharctr(':');
+	LCD_vidWriteCharctr('0');
+	LCD_vidWriteCharctr('0');
+	LCD_vidWriteCharctr(':');
+	LCD_vidWriteCharctr('0');
+	LCD_vidWriteCharctr('0');
+
+	LCD_vidWriteStringAtPossition((u8 *)"Date: ",1,0);
+	LCD_vidWriteCharctr('0');
+	LCD_vidWriteCharctr('1');
+	LCD_vidWriteCharctr(':');
+	LCD_vidWriteCharctr('0');
+	LCD_vidWriteCharctr('1');
+
+
+	TIMER0_vidStartTimer_CTCMode(0,250,TIMER0_CTC_CM_INTRUPT);
+
+while(1)
+{
+
+while (Mode == MODE1)
+		{
+			if(Sec_Counter >= 60)
+			{
+				Sec_Counter = 0;
+				Min_Counter++;
+				if(Min_Counter >=60)
+				{
+					Min_Counter = 0;
+					Hour_Counter++;
+					if(Hour_Counter >=24)
+					{
+						Hour_Counter = 0;
+						Day_Counter++;
+						if(Day_Counter >=31)
+						{
+							Day_Counter = 1;
+							Mon_Counter++;
+							if(Mon_Counter >=13)
+							{
+								Mon_Counter = 1;
+							}
+							if(Mon_Counter <10)
+							{
+								LCD_vidGotoxy(1,9);
+								LCD_vidWriteCharctr('0');
+								LCD_vidWriteflt((f32)Mon_Counter);
+							}
+							else
+							{
+								LCD_vidGotoxy(1,9);
+								LCD_vidWriteflt((f32)Mon_Counter);
+							}
+						}
+						if(Day_Counter <10)
+						{
+							LCD_vidGotoxy(1,6);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Day_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(1,6);
+							LCD_vidWriteflt((f32)Day_Counter);
+						}
+
+					}
+
+					if(Hour_Counter <10)
+					{
+						LCD_vidGotoxy(0,6);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Hour_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(0,6);
+						LCD_vidWriteflt((f32)Hour_Counter);
+					}
+				}
+
+				if(Min_Counter <10)
+				{
+					LCD_vidGotoxy(0,9);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Min_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,9);
+					LCD_vidWriteflt((f32)Min_Counter);
+				}
+			}
+		}
+
+		LCD_vidGotoxy(0,7);
+
+while (Mode == MODE2)
+	{
+		/*Up*/
+		if((DIO_u8GetPinVal(DIO_PORTD,DIO_PIN3) == 0))
+		{
+			while(DIO_u8GetPinVal(DIO_PORTD,DIO_PIN3) == 0);
+			if(Location == 0)
+			{
+				Hour_Counter++;
+				if(Hour_Counter >=24)
+				{
+					Hour_Counter = 0;
+					Day_Counter++;
+					if(Day_Counter >=31)
+					{
+						Day_Counter = 1;
+						Mon_Counter++;
+						if(Mon_Counter >=13)
+						{
+							Mon_Counter = 1;
+						}
+						if(Mon_Counter <10)
+						{
+							LCD_vidGotoxy(1,9);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Mon_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(1,9);
+							LCD_vidWriteflt((f32)Mon_Counter);
+						}
+					}
+					if(Day_Counter <10)
+					{
+						LCD_vidGotoxy(1,6);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Day_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(1,6);
+						LCD_vidWriteflt((f32)Day_Counter);
+					}
+
+				}
+				if(Hour_Counter <10)
+				{
+					LCD_vidGotoxy(0,6);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Hour_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,6);
+					LCD_vidWriteflt((f32)Hour_Counter);
+				}
+
+				LCD_vidGotoxy(0,7);
+			}
+			else
+			if(Location == 1)
+			{
+			Min_Counter++;
+			if(Min_Counter >=60)
+			{
+				Min_Counter = 0;
+				Hour_Counter++;
+				if(Hour_Counter >=24)
+				{
+					Hour_Counter = 0;
+					Day_Counter++;
+					if(Day_Counter >=31)
+					{
+						Day_Counter = 1;
+						Mon_Counter++;
+						if(Mon_Counter >=13)
+						{
+							Mon_Counter = 1;
+						}
+						if(Mon_Counter <10)
+						{
+							LCD_vidGotoxy(1,9);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Mon_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(1,9);
+							LCD_vidWriteflt((f32)Mon_Counter);
+						}
+					}
+					if(Day_Counter <10)
+					{
+						LCD_vidGotoxy(1,6);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Day_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(1,6);
+						LCD_vidWriteflt((f32)Day_Counter);
+					}
+
+				}
+
+				if(Hour_Counter <10)
+				{
+					LCD_vidGotoxy(0,6);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Hour_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,6);
+					LCD_vidWriteflt((f32)Hour_Counter);
+				}
+			}
+
+				if(Min_Counter <10)
+				{
+					LCD_vidGotoxy(0,9);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Min_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,9);
+					LCD_vidWriteflt((f32)Min_Counter);
+				}
+
+				LCD_vidGotoxy(0,10);
+			}
+			else
+			if(Location == 2)
+			{
+				Sec_Counter++;
+				if(Sec_Counter >= 60)
+				{
+					Sec_Counter = 0;
+					Min_Counter++;
+					if(Min_Counter >=60)
+					{
+						Min_Counter = 0;
+						Hour_Counter++;
+						if(Hour_Counter >=24)
+						{
+							Hour_Counter = 0;
+							Day_Counter++;
+
+							if(Day_Counter >=31)
+							{
+								Day_Counter = 1;
+								Mon_Counter++;
+								if(Mon_Counter >=13)
+								{
+									Mon_Counter = 1;
+								}
+								if(Mon_Counter <10)
+								{
+									LCD_vidGotoxy(1,9);
+									LCD_vidWriteCharctr('0');
+									LCD_vidWriteflt((f32)Mon_Counter);
+								}
+								else
+								{
+									LCD_vidGotoxy(1,9);
+									LCD_vidWriteflt((f32)Mon_Counter);
+								}
+							}
+							if(Day_Counter <10)
+							{
+								LCD_vidGotoxy(1,6);
+								LCD_vidWriteCharctr('0');
+								LCD_vidWriteflt((f32)Day_Counter);
+							}
+							else
+							{
+								LCD_vidGotoxy(1,6);
+								LCD_vidWriteflt((f32)Day_Counter);
+							}
+
+						}
+						if(Hour_Counter <10)
+						{
+							LCD_vidGotoxy(0,6);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Hour_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(0,6);
+							LCD_vidWriteflt((f32)Hour_Counter);
+						}
+					}
+
+					if(Min_Counter <10)
+					{
+						LCD_vidGotoxy(0,9);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Min_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(0,9);
+						LCD_vidWriteflt((f32)Min_Counter);
+					}
+				}
+
+				if(Sec_Counter<10)
+				{
+					LCD_vidGotoxy(0,12);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Sec_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,12);
+					LCD_vidWriteflt((f32)Sec_Counter);
+				}
+				LCD_vidGotoxy(0,13);
+			}
+			else if(Location == 3)
+			{
+				Day_Counter++;
+				if(Day_Counter >=31)
+				{
+					Day_Counter = 1;
+					Mon_Counter++;
+					if(Mon_Counter >=13)
+					{
+						Mon_Counter = 1;
+					}
+					if(Mon_Counter <10)
+					{
+						LCD_vidGotoxy(1,9);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Mon_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(1,9);
+						LCD_vidWriteflt((f32)Mon_Counter);
+					}
+				}
+				if(Day_Counter <10)
+				{
+					LCD_vidGotoxy(1,6);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Day_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(1,6);
+					LCD_vidWriteflt((f32)Day_Counter);
+				}
+			LCD_vidGotoxy(1,7);
+			}
+			else if(Location == 4)
+			{
+				Mon_Counter++;
+				if(Mon_Counter >=13)
+				{
+					Mon_Counter = 1;
+				}
+				if(Mon_Counter <10)
+				{
+					LCD_vidGotoxy(1,9);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Mon_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(1,9);
+					LCD_vidWriteflt((f32)Mon_Counter);
+				}
+			LCD_vidGotoxy(1,10);
+		}
+
+		}
+		/*Down*/
+		else if((DIO_u8GetPinVal(DIO_PORTD,DIO_PIN4) == 0))
+			 {
+			while(DIO_u8GetPinVal(DIO_PORTD,DIO_PIN4) == 0);
+
+			if(Location == 2)
+			{
+				Sec_Counter--;
+				if(Sec_Counter == 255)
+				{
+				Sec_Counter = 59;
+				Min_Counter--;
+				if(Min_Counter == 255)
+				{
+					Min_Counter = 59;
+					Hour_Counter--;
+					if(Hour_Counter == 255)
+					{
+						Hour_Counter = 23;
+						Day_Counter--;
+						if(Day_Counter == 0)
+						{
+							Day_Counter = 30;
+							Mon_Counter--;
+							if(Mon_Counter == 0)
+							{
+								Mon_Counter = 12;
+							}
+							if(Mon_Counter <10)
+							{
+								LCD_vidGotoxy(1,9);
+								LCD_vidWriteCharctr('0');
+								LCD_vidWriteflt((f32)Mon_Counter);
+							}
+							else
+							{
+								LCD_vidGotoxy(1,9);
+								LCD_vidWriteflt((f32)Mon_Counter);
+							}
+
+						}
+						if(Day_Counter <10)
+						{
+							LCD_vidGotoxy(1,6);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Day_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(1,6);
+							LCD_vidWriteflt((f32)Day_Counter);
+						}
+						}
+						if(Hour_Counter <10)
+						{
+							LCD_vidGotoxy(0,6);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Hour_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(0,6);
+							LCD_vidWriteflt((f32)Hour_Counter);
+						}
+					}
+					if(Min_Counter <10)
+					{
+						LCD_vidGotoxy(0,9);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Min_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(0,9);
+						LCD_vidWriteflt((f32)Min_Counter);
+					}
+
+					}
+
+				if(Sec_Counter<10)
+				{
+					LCD_vidGotoxy(0,12);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Sec_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,12);
+					LCD_vidWriteflt((f32)Sec_Counter);
+				}
+					LCD_vidGotoxy(0,13);
+			}
+			else
+			if(Location == 1)
+			{
+				Min_Counter--;
+				if(Min_Counter ==255)
+				{
+					Min_Counter = 59;
+					Hour_Counter--;
+					if(Hour_Counter == 255)
+					{
+						Hour_Counter = 23;
+						Day_Counter--;
+						if(Day_Counter == 0)
+						{
+							Day_Counter = 30;
+							Mon_Counter--;
+							if(Mon_Counter == 0)
+							{
+								Mon_Counter = 12;
+							}
+							if(Mon_Counter <10)
+							{
+								LCD_vidGotoxy(1,9);
+								LCD_vidWriteCharctr('0');
+								LCD_vidWriteflt((f32)Mon_Counter);
+							}
+							else
+							{
+								LCD_vidGotoxy(1,9);
+								LCD_vidWriteflt((f32)Mon_Counter);
+							}
+
+						}
+						if(Day_Counter <10)
+						{
+							LCD_vidGotoxy(1,6);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Day_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(1,6);
+							LCD_vidWriteflt((f32)Day_Counter);
+						}
+
+					}
+					if(Hour_Counter <10)
+					{
+						LCD_vidGotoxy(0,6);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Hour_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(0,6);
+						LCD_vidWriteflt((f32)Hour_Counter);
+					}
+
+				}
+				if(Min_Counter <10)
+				{
+					LCD_vidGotoxy(0,9);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Min_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,9);
+					LCD_vidWriteflt((f32)Min_Counter);
+				}
+				LCD_vidGotoxy(0,10);
+			}
+			else if(Location == 0)
+			{
+				Hour_Counter--;
+				if(Hour_Counter == 255)
+				{
+					Hour_Counter = 23;
+					Day_Counter--;
+					if(Day_Counter == 0)
+					{
+						Day_Counter = 30;
+						Mon_Counter--;
+						if(Mon_Counter == 0)
+						{
+							Mon_Counter = 12;
+						}
+						if(Mon_Counter <10)
+						{
+							LCD_vidGotoxy(1,9);
+							LCD_vidWriteCharctr('0');
+							LCD_vidWriteflt((f32)Mon_Counter);
+						}
+						else
+						{
+							LCD_vidGotoxy(1,9);
+							LCD_vidWriteflt((f32)Mon_Counter);
+						}
+
+					}
+					if(Day_Counter <10)
+					{
+						LCD_vidGotoxy(1,6);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Day_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(1,6);
+						LCD_vidWriteflt((f32)Day_Counter);
+					}
+				}
+				if(Hour_Counter <10)
+				{
+					LCD_vidGotoxy(0,6);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Hour_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(0,6);
+					LCD_vidWriteflt((f32)Hour_Counter);
+				}
+				LCD_vidGotoxy(0,7);
+			}
+			else if(Location == 3)
+			{
+				Day_Counter--;
+				if(Day_Counter == 0)
+				{
+					Day_Counter = 30;
+					Mon_Counter--;
+					if(Mon_Counter == 0)
+					{
+						Mon_Counter = 12;
+					}
+					if(Mon_Counter <10)
+					{
+						LCD_vidGotoxy(1,9);
+						LCD_vidWriteCharctr('0');
+						LCD_vidWriteflt((f32)Mon_Counter);
+					}
+					else
+					{
+						LCD_vidGotoxy(1,9);
+						LCD_vidWriteflt((f32)Mon_Counter);
+					}
+
+				}
+				if(Day_Counter <10)
+				{
+					LCD_vidGotoxy(1,6);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Day_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(1,6);
+					LCD_vidWriteflt((f32)Day_Counter);
+				}
+				LCD_vidGotoxy(1,7);
+			}
+			else if(Location == 4)
+			{
+				Mon_Counter--;
+				if(Mon_Counter == 0)
+				{
+					Mon_Counter = 12;
+				}
+				if(Mon_Counter <10)
+				{
+					LCD_vidGotoxy(1,9);
+					LCD_vidWriteCharctr('0');
+					LCD_vidWriteflt((f32)Mon_Counter);
+				}
+				else
+				{
+					LCD_vidGotoxy(1,9);
+					LCD_vidWriteflt((f32)Mon_Counter);
+				}
+				LCD_vidGotoxy(1,10);
+			}
+	}
+			/*Right*/
+			else if((DIO_u8GetPinVal(DIO_PORTD,DIO_PIN5) == 0))
+				 {
+				while(DIO_u8GetPinVal(DIO_PORTD,DIO_PIN5) == 0);
+
+				if(Location==0)
+					{
+						Location=1;
+						LCD_vidGotoxy(0,10);
+					}
+					else if(Location==1)
+					{
+						Location=2;
+						LCD_vidGotoxy(0,13);
+					}
+					else if( Location == 2)
+					{
+						Location=3;
+						LCD_vidGotoxy(1,7);
+					}
+
+					else if(Location == 3)
+					{
+						Location=4;
+						LCD_vidGotoxy(1,10);
+					}
+
+					else{
+						Location = 4;
+						LCD_vidGotoxy(1,10);
+
+					}
+
+				 }
+				/*Left*/
+				else if((DIO_u8GetPinVal(DIO_PORTD,DIO_PIN6) == 0))
+					 {
+					while(DIO_u8GetPinVal(DIO_PORTD,DIO_PIN6) == 0);
+						if(Location==0)
+						{
+							Location=0;
+							LCD_vidGotoxy(0,7);
+						}
+						else if(Location==1)
+						{
+							Location=0;
+							LCD_vidGotoxy(0,7);
+						}
+						if(Location==2)
+						{
+							Location=1;
+							LCD_vidGotoxy(0,10);
+						}
+						else if(Location==3)
+						{
+							Location=2;
+							LCD_vidGotoxy(0,13);
+						}
+						else if(Location==4)
+						{
+							Location = 3;
+							LCD_vidGotoxy(1,7);
+						}
+				}
+
+	}
+}
+
+}
+
+
+void Sec_Timing(void)
+{
+
+	counter ++;
+	if(counter == 4000)
+	{
+		Sec_Counter++;
+		if(Sec_Counter == 60)
+			Sec_Counter = 0;
+		if(Sec_Counter<10)
+		{
+			LCD_vidGotoxy(0,12);
+			LCD_vidWriteCharctr('0');
+			LCD_vidWriteflt((f32)Sec_Counter);
+		}
+		else
+		{
+			LCD_vidGotoxy(0,12);
+			LCD_vidWriteflt((f32)Sec_Counter);
+		}
+		if(Sec_Counter == 0)
+				Sec_Counter = 60;
+			counter = 0;
+	}
+
+}
+
+
+void Mode_Chang(void)
+{
+	if(Mode == MODE1)
+	{
+		TIMER0_vidStopTimer();
+
+		LCD_vidSendCommand(LCD_CURSURON_BLINKOFF);
+		Mode = MODE2;
+		Location = 0;
+	}
+	else
+	{
+		TIMER0_ContCounting();
+		LCD_vidSendCommand(LCD_CURSUROFF_BLINKOFF);
+		Mode = MODE1;
+	}
+}
