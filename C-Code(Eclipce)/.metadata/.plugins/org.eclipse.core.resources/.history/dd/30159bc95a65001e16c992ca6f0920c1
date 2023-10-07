@@ -16,7 +16,6 @@
  * (2) Edit The Values Of The Counters
  * (3) Down Counting
  * */
-
 #define MODE1	1
 #define MODE2	2
 #define MODE3	3
@@ -40,8 +39,7 @@ u8 Mode = MODE1 ;
 u8 Location = 0 ;
 
 /*Change From The One Mode To Another*/
-void Mode_Chang1(void);
-void Mode_Chang2(void);
+void Mode_Chang(void);
 
 /*Counting One Second*/
 void Sec_Timing(void);
@@ -56,24 +54,18 @@ int main()
 	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN4,DIO_INPUT);
 	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN5,DIO_INPUT);
 	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN6,DIO_INPUT);
-	DIO_vidSetPinDir(DIO_PORTB,DIO_PIN2,DIO_INPUT);
-
-	DIO_vidSetPinDir(DIO_PORTB,DIO_PIN7,DIO_OUTPUT);
 
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN2);
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN3);
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN4);
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN5);
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN6);
-	DIO_vidEnablePullUpRes(DIO_PORTB,DIO_PIN2);
 
 	DIO_vidEnableIntrupt(DIO_INT_NUM0,DIO_INT_F_EDGE);
-	DIO_vidEnableIntrupt(DIO_INT_NUM2,DIO_INT_F_EDGE);
 
 	LCD_vidSendCommand(LCD_CURSUROFF_BLINKOFF);
 	Timer0_CTC_Call_Back = Sec_Timing;
-	DIO_INT0_Call_Back = Mode_Chang1;
-	DIO_INT2_Call_Back = Mode_Chang2;
+	DIO_INT0_Call_Back = Mode_Chang;
 
 
 	LCD_vidWriteStringAtPossition((u8 *)"Time: ",0,0);
@@ -173,87 +165,9 @@ while (Mode == MODE1)
 				}
 			}
 		}
-while (Mode == MODE3)
-{
-	if(Sec_Counter == 255)
-	{
-	Sec_Counter = 59;
-	Min_Counter--;
-	if(Min_Counter == 255)
-	{
-		Min_Counter = 59;
-		Hour_Counter--;
-		if(Hour_Counter == 255)
-		{
-			Hour_Counter = 23;
-			Day_Counter--;
-			if(Day_Counter == 0)
-			{
-				Day_Counter = 30;
-				Mon_Counter--;
-				if(Mon_Counter == 0)
-				{
-					Mon_Counter = 12;
-				}
-				if(Mon_Counter <10)
-				{
-					LCD_vidGotoxy(1,9);
-					LCD_vidWriteCharctr('0');
-					LCD_vidWriteflt((f32)Mon_Counter);
-				}
-				else
-				{
-					LCD_vidGotoxy(1,9);
-					LCD_vidWriteflt((f32)Mon_Counter);
-				}
 
-			}
-			if(Day_Counter <10)
-			{
-				LCD_vidGotoxy(1,6);
-				LCD_vidWriteCharctr('0');
-				LCD_vidWriteflt((f32)Day_Counter);
-			}
-			else
-			{
-				LCD_vidGotoxy(1,6);
-				LCD_vidWriteflt((f32)Day_Counter);
-			}
-			}
-			if(Hour_Counter <10)
-			{
-				LCD_vidGotoxy(0,6);
-				LCD_vidWriteCharctr('0');
-				LCD_vidWriteflt((f32)Hour_Counter);
-			}
-			else
-			{
-				LCD_vidGotoxy(0,6);
-				LCD_vidWriteflt((f32)Hour_Counter);
-			}
-		}
-		if(Min_Counter <10)
-		{
-			LCD_vidGotoxy(0,9);
-			LCD_vidWriteCharctr('0');
-			LCD_vidWriteflt((f32)Min_Counter);
-		}
-		else
-		{
-			LCD_vidGotoxy(0,9);
-			LCD_vidWriteflt((f32)Min_Counter);
-		}
-
-		}
-	if((Sec_Counter == 0)&&(Min_Counter == 0)&&(Hour_Counter==0))
-	{
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_HIGH);
-		TIMER0_vidStopTimer();
-	}
-
-}
 		LCD_vidGotoxy(0,7);
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_LOW);
+
 while (Mode == MODE2)
 	{
 		/*Up*/
@@ -882,8 +796,7 @@ while (Mode == MODE2)
 
 void Sec_Timing(void)
 {
-	if(Mode == MODE1)
-	{
+
 	counter ++;
 	if(counter == 4000)
 	{
@@ -904,39 +817,14 @@ void Sec_Timing(void)
 		if(Sec_Counter == 0)
 				Sec_Counter = 60;
 			counter = 0;
-		}
-	}
-	else if(Mode == MODE3)
-	{
-		counter ++;
-		if(counter == 4000)
-		{
-			Sec_Counter--;
-			if(Sec_Counter == 255)
-				Sec_Counter = 59;
-			if(Sec_Counter<10)
-			{
-				LCD_vidGotoxy(0,12);
-				LCD_vidWriteCharctr('0');
-				LCD_vidWriteflt((f32)Sec_Counter);
-			}
-			else
-			{
-				LCD_vidGotoxy(0,12);
-				LCD_vidWriteflt((f32)Sec_Counter);
-			}
-			if(Sec_Counter == 59)
-					Sec_Counter = 255;
-				counter = 0;
-		}
 	}
 
 }
 
 
-void Mode_Chang1(void)
+void Mode_Chang(void)
 {
-	if((Mode == MODE1)||(Mode == MODE3))
+	if(Mode == MODE1)
 	{
 		TIMER0_vidStopTimer();
 
@@ -946,30 +834,8 @@ void Mode_Chang1(void)
 	}
 	else
 	{
-		counter = 0;
 		TIMER0_ContCounting();
 		LCD_vidSendCommand(LCD_CURSUROFF_BLINKOFF);
 		Mode = MODE1;
-
 	}
 }
-
-void Mode_Chang2(void)
-{
-	if((Mode == MODE1)||(Mode == MODE3))
-	{
-		TIMER0_vidStopTimer();
-
-		LCD_vidSendCommand(LCD_CURSURON_BLINKOFF);
-		Mode = MODE2;
-		Location = 0;
-	}
-	else
-	{
-		counter = 0;
-		TIMER0_ContCounting();
-		LCD_vidSendCommand(LCD_CURSUROFF_BLINKOFF);
-		Mode = MODE3;
-	}
-}
-

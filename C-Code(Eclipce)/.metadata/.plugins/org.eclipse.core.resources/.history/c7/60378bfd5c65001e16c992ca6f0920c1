@@ -269,11 +269,7 @@ void __vector_1(void)
 }
 
 
-void __vector_3(void)	__attribute__((signal));
-void __vector_3(void)
-{
-	DIO_INT2_Call_Back();
-}
+
 
 
 

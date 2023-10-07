@@ -250,10 +250,13 @@ while (Mode == MODE3)
 		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_HIGH);
 		TIMER0_vidStopTimer();
 	}
-
+	else
+	{
+		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_LOW);
+	}
 }
 		LCD_vidGotoxy(0,7);
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_LOW);
+
 while (Mode == MODE2)
 	{
 		/*Up*/

@@ -62,6 +62,7 @@ DIO_INT0_Call_Back  0x2               ./DIO_Prog.o
 Timer0_OF_Call_Back
                     0x2               ./TIMER0_Prog.o
 counter             0x4               ./main.o
+DIO_INT2_Call_Back  0x2               ./DIO_Prog.o
 
 Memory Configuration
 
@@ -175,7 +176,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x6d9e
+.text           0x00000000     0x71ba
  *(.vectors)
  .vectors       0x00000000       0x54 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
                 0x00000000                __vectors
@@ -234,7 +235,6 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x0000008e                __vector_12
                 0x0000008e                __bad_interrupt
                 0x0000008e                __vector_6
-                0x0000008e                __vector_3
                 0x0000008e                __vector_13
                 0x0000008e                __vector_17
                 0x0000008e                __vector_19
@@ -329,132 +329,138 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .text.__vector_1
                 0x0000358c       0x5a ./DIO_Prog.o
                 0x0000358c                __vector_1
+ .text.__vector_3
+                0x000035e6       0x5a ./DIO_Prog.o
+                0x000035e6                __vector_3
  .text.LCD_vidSendCommand
-                0x000035e6      0x14e ./LCD_Prog.o
-                0x000035e6                LCD_vidSendCommand
+                0x00003640      0x14e ./LCD_Prog.o
+                0x00003640                LCD_vidSendCommand
  .text.LCD_vidTurnOn
-                0x00003734      0x1a8 ./LCD_Prog.o
-                0x00003734                LCD_vidTurnOn
+                0x0000378e      0x1a8 ./LCD_Prog.o
+                0x0000378e                LCD_vidTurnOn
  .text.LCD_vidTurnOff
-                0x000038dc      0x1a8 ./LCD_Prog.o
-                0x000038dc                LCD_vidTurnOff
+                0x00003936      0x1a8 ./LCD_Prog.o
+                0x00003936                LCD_vidTurnOff
  .text.LCD_vidInit
-                0x00003a84      0x72c ./LCD_Prog.o
-                0x00003a84                LCD_vidInit
+                0x00003ade      0x72c ./LCD_Prog.o
+                0x00003ade                LCD_vidInit
  .text.LCD_vidGotoxy
-                0x000041b0      0x1e2 ./LCD_Prog.o
-                0x000041b0                LCD_vidGotoxy
+                0x0000420a      0x1e2 ./LCD_Prog.o
+                0x0000420a                LCD_vidGotoxy
  .text.LCD_vidWriteStringAtPossition
-                0x00004392       0x70 ./LCD_Prog.o
-                0x00004392                LCD_vidWriteStringAtPossition
+                0x000043ec       0x70 ./LCD_Prog.o
+                0x000043ec                LCD_vidWriteStringAtPossition
  .text.LCD_vidWriteCharctr
-                0x00004402      0x16c ./LCD_Prog.o
-                0x00004402                LCD_vidWriteCharctr
+                0x0000445c      0x16c ./LCD_Prog.o
+                0x0000445c                LCD_vidWriteCharctr
  .text.LCD_u8ReadBusyFlagAndAddress
-                0x0000456e      0x402 ./LCD_Prog.o
-                0x0000456e                LCD_u8ReadBusyFlagAndAddress
+                0x000045c8      0x402 ./LCD_Prog.o
+                0x000045c8                LCD_u8ReadBusyFlagAndAddress
  .text.LCD_vidStoreSpecialChar
-                0x00004970       0x8a ./LCD_Prog.o
-                0x00004970                LCD_vidStoreSpecialChar
+                0x000049ca       0x8a ./LCD_Prog.o
+                0x000049ca                LCD_vidStoreSpecialChar
  .text.LCD_vidDisplaySpecialChar
-                0x000049fa       0x20 ./LCD_Prog.o
-                0x000049fa                LCD_vidDisplaySpecialChar
+                0x00004a54       0x20 ./LCD_Prog.o
+                0x00004a54                LCD_vidDisplaySpecialChar
  .text.LCD_vidClearScrean
-                0x00004a1a      0x110 ./LCD_Prog.o
-                0x00004a1a                LCD_vidClearScrean
+                0x00004a74      0x110 ./LCD_Prog.o
+                0x00004a74                LCD_vidClearScrean
  .text.LCD_vidReturnHome
-                0x00004b2a      0x110 ./LCD_Prog.o
-                0x00004b2a                LCD_vidReturnHome
+                0x00004b84      0x110 ./LCD_Prog.o
+                0x00004b84                LCD_vidReturnHome
  .text.LCD_vidWriteString
-                0x00004c3a       0x52 ./LCD_Prog.o
-                0x00004c3a                LCD_vidWriteString
+                0x00004c94       0x52 ./LCD_Prog.o
+                0x00004c94                LCD_vidWriteString
  .text.LCD_vidWriteflt
-                0x00004c8c      0x2c0 ./LCD_Prog.o
-                0x00004c8c                LCD_vidWriteflt
+                0x00004ce6      0x2c0 ./LCD_Prog.o
+                0x00004ce6                LCD_vidWriteflt
  .text.Get_Power
-                0x00004f4c       0x7e ./LCD_Prog.o
-                0x00004f4c                Get_Power
+                0x00004fa6       0x7e ./LCD_Prog.o
+                0x00004fa6                Get_Power
  .text.TIMER0_vidInit
-                0x00004fca       0x2a ./TIMER0_Prog.o
-                0x00004fca                TIMER0_vidInit
+                0x00005024       0x2a ./TIMER0_Prog.o
+                0x00005024                TIMER0_vidInit
  .text.TIMER0_vidStartTimer_OverFlowMode
-                0x00004ff4       0x60 ./TIMER0_Prog.o
-                0x00004ff4                TIMER0_vidStartTimer_OverFlowMode
+                0x0000504e       0x60 ./TIMER0_Prog.o
+                0x0000504e                TIMER0_vidStartTimer_OverFlowMode
  .text.TIMER0_vidStartTimer_CTCMode
-                0x00005054      0x200 ./TIMER0_Prog.o
-                0x00005054                TIMER0_vidStartTimer_CTCMode
+                0x000050ae      0x200 ./TIMER0_Prog.o
+                0x000050ae                TIMER0_vidStartTimer_CTCMode
  .text.TIMER0_vidStartTimer_PWMMode
-                0x00005254      0x2e0 ./TIMER0_Prog.o
-                0x00005254                TIMER0_vidStartTimer_PWMMode
+                0x000052ae      0x2e0 ./TIMER0_Prog.o
+                0x000052ae                TIMER0_vidStartTimer_PWMMode
  .text.TIMER0_vidStartTimer_PhaseCorrectMode
-                0x00005534       0xb4 ./TIMER0_Prog.o
-                0x00005534                TIMER0_vidStartTimer_PhaseCorrectMode
+                0x0000558e       0xb4 ./TIMER0_Prog.o
+                0x0000558e                TIMER0_vidStartTimer_PhaseCorrectMode
  .text.TIMER0_vidSetInitReg
-                0x000055e8       0x1c ./TIMER0_Prog.o
-                0x000055e8                TIMER0_vidSetInitReg
+                0x00005642       0x1c ./TIMER0_Prog.o
+                0x00005642                TIMER0_vidSetInitReg
  .text.TIMER0_vidSetComparReg
-                0x00005604       0x1c ./TIMER0_Prog.o
-                0x00005604                TIMER0_vidSetComparReg
+                0x0000565e       0x1c ./TIMER0_Prog.o
+                0x0000565e                TIMER0_vidSetComparReg
  .text.TIMER0_vidGetCounterReg
-                0x00005620       0x14 ./TIMER0_Prog.o
-                0x00005620                TIMER0_vidGetCounterReg
+                0x0000567a       0x14 ./TIMER0_Prog.o
+                0x0000567a                TIMER0_vidGetCounterReg
  .text.TIMER0_vidGETComparReg
-                0x00005634       0x14 ./TIMER0_Prog.o
-                0x00005634                TIMER0_vidGETComparReg
+                0x0000568e       0x14 ./TIMER0_Prog.o
+                0x0000568e                TIMER0_vidGETComparReg
  .text.TIMER0_vidEnableOverFlowInterrupt
-                0x00005648       0x2a ./TIMER0_Prog.o
-                0x00005648                TIMER0_vidEnableOverFlowInterrupt
+                0x000056a2       0x2a ./TIMER0_Prog.o
+                0x000056a2                TIMER0_vidEnableOverFlowInterrupt
  .text.TIMER0_vidEnableCompareMatchInterrupt
-                0x00005672       0x2a ./TIMER0_Prog.o
-                0x00005672                TIMER0_vidEnableCompareMatchInterrupt
+                0x000056cc       0x2a ./TIMER0_Prog.o
+                0x000056cc                TIMER0_vidEnableCompareMatchInterrupt
  .text.TIMER0_vidDisableOverFlowInterrupt
-                0x0000569c       0x1c ./TIMER0_Prog.o
-                0x0000569c                TIMER0_vidDisableOverFlowInterrupt
+                0x000056f6       0x1c ./TIMER0_Prog.o
+                0x000056f6                TIMER0_vidDisableOverFlowInterrupt
  .text.TIMER0_vidDisableCompareMatchInterrupt
-                0x000056b8       0x1c ./TIMER0_Prog.o
-                0x000056b8                TIMER0_vidDisableCompareMatchInterrupt
+                0x00005712       0x1c ./TIMER0_Prog.o
+                0x00005712                TIMER0_vidDisableCompareMatchInterrupt
  .text.TIMER0_vidStopTimer
-                0x000056d4       0x38 ./TIMER0_Prog.o
-                0x000056d4                TIMER0_vidStopTimer
+                0x0000572e       0x38 ./TIMER0_Prog.o
+                0x0000572e                TIMER0_vidStopTimer
  .text.TIMER0_ContCounting
-                0x0000570c       0x38 ./TIMER0_Prog.o
-                0x0000570c                TIMER0_ContCounting
+                0x00005766       0x38 ./TIMER0_Prog.o
+                0x00005766                TIMER0_ContCounting
  .text.TIMER0_vidEnableAllInterrupt
-                0x00005744       0x1c ./TIMER0_Prog.o
-                0x00005744                TIMER0_vidEnableAllInterrupt
+                0x0000579e       0x1c ./TIMER0_Prog.o
+                0x0000579e                TIMER0_vidEnableAllInterrupt
  .text.TIMER0_vidDisableAllInterrupt
-                0x00005760       0x1c ./TIMER0_Prog.o
-                0x00005760                TIMER0_vidDisableAllInterrupt
+                0x000057ba       0x1c ./TIMER0_Prog.o
+                0x000057ba                TIMER0_vidDisableAllInterrupt
  .text.__vector_11
-                0x0000577c       0x5a ./TIMER0_Prog.o
-                0x0000577c                __vector_11
- .text.__vector_10
                 0x000057d6       0x5a ./TIMER0_Prog.o
-                0x000057d6                __vector_10
- .text.main     0x00005830     0x1354 ./main.o
-                0x00005830                main
+                0x000057d6                __vector_11
+ .text.__vector_10
+                0x00005830       0x5a ./TIMER0_Prog.o
+                0x00005830                __vector_10
+ .text.main     0x0000588a     0x15b6 ./main.o
+                0x0000588a                main
  .text.Sec_Timing
-                0x00006b84       0xea ./main.o
-                0x00006b84                Sec_Timing
- .text.Mode_Chang
-                0x00006c6e       0x3c ./main.o
-                0x00006c6e                Mode_Chang
- .text.libgcc   0x00006caa       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
-                0x00006caa                __mulsi3
- .text.libgcc   0x00006ce8        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x00006ce8        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x00006ce8        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
- .text.libgcc   0x00006ce8       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
-                0x00006ce8                __udivmodsi4
- .text.libgcc   0x00006d2c       0x38 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
-                0x00006d2c                __prologue_saves__
- .text.libgcc   0x00006d64       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
-                0x00006d64                __epilogue_restores__
-                0x00006d9a                . = ALIGN (0x2)
+                0x00006e40      0x1de ./main.o
+                0x00006e40                Sec_Timing
+ .text.Mode_Chang1
+                0x0000701e       0x54 ./main.o
+                0x0000701e                Mode_Chang1
+ .text.Mode_Chang2
+                0x00007072       0x54 ./main.o
+                0x00007072                Mode_Chang2
+ .text.libgcc   0x000070c6       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+                0x000070c6                __mulsi3
+ .text.libgcc   0x00007104        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00007104        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00007104        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00007104       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+                0x00007104                __udivmodsi4
+ .text.libgcc   0x00007148       0x38 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                0x00007148                __prologue_saves__
+ .text.libgcc   0x00007180       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                0x00007180                __epilogue_restores__
+                0x000071b6                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00006d9a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x00006d9a                exit
-                0x00006d9a                _exit
+ .fini9         0x000071b6        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x000071b6                exit
+                0x000071b6                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -473,11 +479,11 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00006d9a        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x000071b6        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00006d9e                _etext = .
+                0x000071ba                _etext = .
 
-.data           0x00800060      0x11a load address 0x00006d9e
+.data           0x00800060      0x11a load address 0x000071ba
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
@@ -530,7 +536,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x0080017a                _edata = .
                 0x0080017a                PROVIDE (__data_end, .)
 
-.bss            0x0080017a        0xf
+.bss            0x0080017a       0x11
                 0x0080017a                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x0080017a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
@@ -579,23 +585,24 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .bss.Location  0x0080017e        0x1 ./main.o
                 0x0080017e                Location
  *(COMMON)
- COMMON         0x0080017f        0x2 ./DIO_Prog.o
+ COMMON         0x0080017f        0x4 ./DIO_Prog.o
                 0x0080017f                DIO_INT0_Call_Back
- COMMON         0x00800181        0x4 ./TIMER0_Prog.o
-                0x00800181                Timer0_CTC_Call_Back
-                0x00800183                Timer0_OF_Call_Back
- COMMON         0x00800185        0x4 ./main.o
-                0x00800185                counter
-                0x00800189                PROVIDE (__bss_end, .)
-                0x00006d9e                __data_load_start = LOADADDR (.data)
-                0x00006eb8                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800181                DIO_INT2_Call_Back
+ COMMON         0x00800183        0x4 ./TIMER0_Prog.o
+                0x00800183                Timer0_CTC_Call_Back
+                0x00800185                Timer0_OF_Call_Back
+ COMMON         0x00800187        0x4 ./main.o
+                0x00800187                counter
+                0x0080018b                PROVIDE (__bss_end, .)
+                0x000071ba                __data_load_start = LOADADDR (.data)
+                0x000072d4                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800189        0x0
-                0x00800189                PROVIDE (__noinit_start, .)
+.noinit         0x0080018b        0x0
+                0x0080018b                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800189                PROVIDE (__noinit_end, .)
-                0x00800189                _end = .
-                0x00800189                PROVIDE (__heap_start, .)
+                0x0080018b                PROVIDE (__noinit_end, .)
+                0x0080018b                _end = .
+                0x0080018b                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -613,19 +620,19 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .signature
  *(.signature*)
 
-.stab           0x00000000     0x4140
+.stab           0x00000000     0x4530
  *(.stab)
- .stab          0x00000000      0x834 ./DIO_Prog.o
- .stab          0x00000834     0x1b18 ./LCD_Prog.o
-                               0x1b9c (size before relaxing)
- .stab          0x0000234c      0x864 ./TIMER0_Prog.o
+ .stab          0x00000000      0x870 ./DIO_Prog.o
+ .stab          0x00000870     0x1b24 ./LCD_Prog.o
+                               0x1ba8 (size before relaxing)
+ .stab          0x00002394      0x864 ./TIMER0_Prog.o
                                 0x8e8 (size before relaxing)
- .stab          0x00002bb0     0x1590 ./main.o
-                               0x1614 (size before relaxing)
+ .stab          0x00002bf8     0x1938 ./main.o
+                               0x19bc (size before relaxing)
 
-.stabstr        0x00000000     0x1033
+.stabstr        0x00000000     0x1091
  *(.stabstr)
- .stabstr       0x00000000     0x1033 ./DIO_Prog.o
+ .stabstr       0x00000000     0x1091 ./DIO_Prog.o
 
 .stab.excl
  *(.stab.excl)

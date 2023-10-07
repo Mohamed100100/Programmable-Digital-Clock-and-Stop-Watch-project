@@ -43,7 +43,6 @@
 #define DIO_UNDEFINED_VALUE 0xff
 
 void (*DIO_INT0_Call_Back)(void)  ;
-void (*DIO_INT2_Call_Back)(void)  ;
 
 /*This macros are responsible on the argument u8InterNum
  * it has 3 cases (1)INT_NUM0 -(2)INT_NUM1 -(3)INT_NUM2 */

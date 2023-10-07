@@ -58,8 +58,6 @@ int main()
 	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN6,DIO_INPUT);
 	DIO_vidSetPinDir(DIO_PORTB,DIO_PIN2,DIO_INPUT);
 
-	DIO_vidSetPinDir(DIO_PORTB,DIO_PIN7,DIO_OUTPUT);
-
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN2);
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN3);
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN4);
@@ -245,15 +243,9 @@ while (Mode == MODE3)
 		}
 
 		}
-	if((Sec_Counter == 0)&&(Min_Counter == 0)&&(Hour_Counter==0))
-	{
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_HIGH);
-		TIMER0_vidStopTimer();
-	}
-
 }
 		LCD_vidGotoxy(0,7);
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_LOW);
+
 while (Mode == MODE2)
 	{
 		/*Up*/

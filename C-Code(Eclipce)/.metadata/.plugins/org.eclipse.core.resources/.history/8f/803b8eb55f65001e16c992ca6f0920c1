@@ -245,15 +245,10 @@ while (Mode == MODE3)
 		}
 
 		}
-	if((Sec_Counter == 0)&&(Min_Counter == 0)&&(Hour_Counter==0))
-	{
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_HIGH);
-		TIMER0_vidStopTimer();
-	}
 
 }
 		LCD_vidGotoxy(0,7);
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_LOW);
+
 while (Mode == MODE2)
 	{
 		/*Up*/
@@ -927,6 +922,16 @@ void Sec_Timing(void)
 			}
 			if(Sec_Counter == 59)
 					Sec_Counter = 255;
+
+			if((Sec_Counter == 0)&&(Min_Counter == 0)&&(Hour_Counter==0))
+				{
+					DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_HIGH);
+				}
+				else
+				{
+					DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_LOW);
+				}
+
 				counter = 0;
 		}
 	}

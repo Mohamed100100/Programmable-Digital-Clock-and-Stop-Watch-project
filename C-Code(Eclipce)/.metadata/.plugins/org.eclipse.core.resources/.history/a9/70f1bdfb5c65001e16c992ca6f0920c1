@@ -41,7 +41,6 @@ u8 Location = 0 ;
 
 /*Change From The One Mode To Another*/
 void Mode_Chang1(void);
-void Mode_Chang2(void);
 
 /*Counting One Second*/
 void Sec_Timing(void);
@@ -57,8 +56,6 @@ int main()
 	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN5,DIO_INPUT);
 	DIO_vidSetPinDir(DIO_PORTD,DIO_PIN6,DIO_INPUT);
 	DIO_vidSetPinDir(DIO_PORTB,DIO_PIN2,DIO_INPUT);
-
-	DIO_vidSetPinDir(DIO_PORTB,DIO_PIN7,DIO_OUTPUT);
 
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN2);
 	DIO_vidEnablePullUpRes(DIO_PORTD,DIO_PIN3);
@@ -175,6 +172,7 @@ while (Mode == MODE1)
 		}
 while (Mode == MODE3)
 {
+	Sec_Counter--;
 	if(Sec_Counter == 255)
 	{
 	Sec_Counter = 59;
@@ -245,15 +243,23 @@ while (Mode == MODE3)
 		}
 
 		}
-	if((Sec_Counter == 0)&&(Min_Counter == 0)&&(Hour_Counter==0))
-	{
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_HIGH);
-		TIMER0_vidStopTimer();
-	}
 
-}
+	if(Sec_Counter<10)
+	{
+		LCD_vidGotoxy(0,12);
+		LCD_vidWriteCharctr('0');
+		LCD_vidWriteflt((f32)Sec_Counter);
+	}
+	else
+	{
+		LCD_vidGotoxy(0,12);
+		LCD_vidWriteflt((f32)Sec_Counter);
+	}
+		LCD_vidGotoxy(0,13);
+
+
 		LCD_vidGotoxy(0,7);
-		DIO_vidSetPinVal(DIO_PORTB,DIO_PIN7,DIO_LOW);
+
 while (Mode == MODE2)
 	{
 		/*Up*/
@@ -904,7 +910,7 @@ void Sec_Timing(void)
 		if(Sec_Counter == 0)
 				Sec_Counter = 60;
 			counter = 0;
-		}
+	}
 	}
 	else if(Mode == MODE3)
 	{
@@ -913,7 +919,7 @@ void Sec_Timing(void)
 		{
 			Sec_Counter--;
 			if(Sec_Counter == 255)
-				Sec_Counter = 59;
+				Sec_Counter = 0;
 			if(Sec_Counter<10)
 			{
 				LCD_vidGotoxy(0,12);
@@ -925,7 +931,7 @@ void Sec_Timing(void)
 				LCD_vidGotoxy(0,12);
 				LCD_vidWriteflt((f32)Sec_Counter);
 			}
-			if(Sec_Counter == 59)
+			if(Sec_Counter == 0)
 					Sec_Counter = 255;
 				counter = 0;
 		}
