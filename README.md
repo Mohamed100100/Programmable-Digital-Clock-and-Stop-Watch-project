@@ -1,6 +1,4 @@
-# Stop_Watch
-
-## **Project Description: Programmable Digital Clock**
+# **Project Description: Programmable Digital Clock**
 
 **Introduction:**
 The Programmable Digital Clock is a versatile timekeeping device built around the ATmega32 microcontroller. It features a user-friendly interface using an LCD display and five push buttons, allowing users to display and edit time and date information effortlessly.
